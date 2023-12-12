@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up():void
     {
         Schema::create('cart_product', function (Blueprint $table) {
             $table->id(); // Por defecto, asume que se llamará 'id'
@@ -18,7 +18,7 @@ return new class extends Migration
         });
     }
 
-    public function down()
+    public function down():void
     {
         Schema::dropIfExists('cart_product');
     }

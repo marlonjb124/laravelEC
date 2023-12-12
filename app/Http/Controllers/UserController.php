@@ -15,7 +15,6 @@ class UserController extends Controller
     {
         $userData = $request->all();
         $userData['password'] = Hash::make($userData['password']);
-
         $newUser = User::create($userData);
         $tokenName = $request->token_name ? $request->token_name : 'authToken';
 
@@ -33,7 +32,7 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = User::where('email',$request->email)->first();
             
-            // Crea un token de acceso para el usuario autenticado utilizando Sanctum
+          
             $tokenName = $request->token_name ? $request->token_name : 'authToken';
             // Crea un token de acceso para el usuario autenticado utilizando Sanctum
             $token = $user->createToken($tokenName);
@@ -66,9 +65,9 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    public function getUserByUsername($username)
+    public function getUserByUsername($name)
     {
-        $user = User::where('username', $username)->first();
+        $user = User::where('name', $name)->first();
 
         return response()->json(['user' => $user]);
     }
@@ -82,33 +81,38 @@ class UserController extends Controller
 
     public function me()
     {
-        $user = auth()->user();
-
-        return response()->json(['user' => $user]);
-    }
-
-    public function addToFavs(Request $request)
-    {
-        // $user = auth()->user();
-        $user = User::where('email',$request->email)->first();
-
+        $user = Auth::user();
+    
         if ($user) {
-            $productId = $request->input('product_id');
-
-            if ($user->fav === null) {
-                $user->fav = [];
-            }
-
-            if (!in_array($productId, $user->fav)) {
-                array_push($user->fav, $productId);
-                $user->save();
-
-                return response()->json(['favs' => $user->fav]);
-            }
+            return response()->json(['user_id' => $user->id]);
+        } else {
+            return response()->json(['message' => 'User not authenticated'], 401);
         }
-
-        return response()->json(['error' => 'User not found'], 404);
     }
+    
+
+    // public function addToFavs(Request $request)
+    // {
+    //     // $user = auth()->user();
+    //     $user = User::where('id',$request->id)->first();
+
+    //     if ($user) {
+    //         $productId = $request->input('product_id');
+
+    //         if ($user->fav === null) {
+    //             $user->fav = [];
+    //         }
+
+    //         if (!in_array($productId, $user->fav)) {
+    //             array_push($user->fav, $productId);
+    //             $user->save();
+
+    //             return response()->json(['favs' => $user->fav]);
+    //         }
+    //     }
+
+    //     return response()->json(['error' => 'User not found'], 404);
+    // }
 
     public function getFavs()
     {

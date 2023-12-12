@@ -12,7 +12,9 @@ class Orden extends Model
     protected $table = "orden";
     protected $primaryKey = "orden_id";
     public $timestamps = false;
-
+    protected $fillable = [
+       "user_id","date","estado"
+    ];
     // Relación con User
     public function user()
     {

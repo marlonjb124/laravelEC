@@ -40,6 +40,10 @@ class User extends Model implements Authenticatable
     {
         return $this->hasMany(Cart::class, 'user_id', 'id');
     }
+    public function favoriteProducts()
+   {
+    return $this->belongsToMany(Product::class, 'favorite_products', 'user_id', 'product_id');
+   }
 }
 
 

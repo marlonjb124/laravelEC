@@ -12,7 +12,9 @@ class Cart extends Model
     protected $table = "cart";
     protected $primaryKey = "cart_id";
     public $timestamps = false;
-
+    protected $fillable = [
+        "cart_id","user_id"
+    ];
     // Relación con User
     public function user()
     {

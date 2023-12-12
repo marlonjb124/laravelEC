@@ -70,5 +70,22 @@ class ProductController extends Controller
 
         return response()->json($newProduct);
     }
+    public function addToFavorites(Request $request)
+    {
+    // $product = Product::findOrFail($productId);
+    $user = $request->user();
+    $user->favoriteProducts()->syncWithoutDetaching([$request->product_id]);
+
+    return response()->json(['message' => 'Product added to favorites']);
+    }
+
+    public function removeFromFavorites(Request $request)
+    {
+    // $product = Product::findOrFail($productId);
+    $user = $request->user();
+    $user->favoriteProducts()->detach($request->product_id);
+
+    return response()->json(['message' => 'Product removed from favorites']);
+}
 }
 

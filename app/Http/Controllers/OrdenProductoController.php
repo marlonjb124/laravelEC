@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\OrdenProducto;
 use Illuminate\Http\Request;
+use App\Models\OrdenProducto;
 
 class OrdenProductoController extends Controller
 {
@@ -11,12 +10,12 @@ class OrdenProductoController extends Controller
     {
         $ordenProductoData = $request->all();
 
-        $newProductToOrden = OrdenProducto::create([
-            'product_id' => $ordenProductoData['product_id'],
+        $newOrdenProducto = OrdenProducto::create([
             'orden_id' => $ordenProductoData['orden_id'],
+            'product_id' => $ordenProductoData['product_id'],
         ]);
 
-        return response()->json($newProductToOrden);
+        return response()->json($newOrdenProducto, 201);
     }
 
     public function searchProductsInOrdenByOrdenId($orden_id)
@@ -26,4 +25,3 @@ class OrdenProductoController extends Controller
         return response()->json($productsInOrden);
     }
 }
-

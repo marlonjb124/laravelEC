@@ -10,7 +10,8 @@ class CartProduct extends Model
     use HasFactory;
 
     protected $table = "cart_product";
-    protected $primaryKey = "id";
+    protected $foreignKey = "cart_id";
+    protected $fillable = ['cart_id', 'product_id', 'quantity'];
     public $timestamps = false;
 
     // Relación con Cart

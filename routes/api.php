@@ -17,6 +17,8 @@ Route::prefix('Products')->group(function () {
     Route::get('Name/{name}', [ProductController::class, 'getProductByName']);
     Route::get('{product_id}', [ProductController::class, 'getProductById']);
     Route::post('NewProduct', [ProductController::class, 'newProduct']);
+   
+   
 });
 
 
@@ -24,7 +26,7 @@ Route::prefix('Products')->group(function () {
 
 Route::prefix('Cart')->group(function () {
     Route::get('Get/{user_id}', [CartProductController::class, 'getProductsByCartId']);
-    Route::post('Add', [CartProductController::class, 'addToCart']);
+    
 });
 
 
@@ -49,6 +51,8 @@ Route::prefix('Orden')->group(function () {
 Route::prefix('Users/Orden')->group(function () {
     Route::post('NewOrden', [OrdenController::class, 'createNewOrden']);
     Route::get('MyOrders/{user_id}', [OrdenController::class, 'searchOrderByUser']);
+    Route::delete('/DeleteOrden/{orden_id}', [OrdenController::class, 'deleteOrden']);
+
 });
 // routes/api.php o routes/web.php
 
@@ -69,11 +73,11 @@ Route::prefix('Users')->group(function () {
     Route::post('Login', [UserController::class, 'login']);
     Route::get('', [UserController::class, 'getUsers']);
     Route::get('Email/{email}', [UserController::class, 'getUserByEmail']);
-    Route::get('Username/{username}', [UserController::class, 'getUserByUsername']);
+    Route::get('name/{username}', [UserController::class, 'getUserByUsername']);
     Route::get('Id/{id}', [UserController::class, 'getUserById']);
-    Route::get('Me', [UserController::class, 'me']);
-    Route::put('AddToFavs', [UserController::class, 'addToFavs']);
-    Route::get('Favs', [UserController::class, 'getFavs']);
+   
+    // Route::put('AddToFavs', [UserController::class, 'addToFavs']);
+    // Route::get('Favs', [UserController::class, 'getFavs']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -86,5 +90,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // });
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('Me', [UserController::class, 'me']);
+    Route::post('favorite', [ProductController::class, 'addToFavorites']);
+    Route::delete('favorite', [ProductController::class, 'removeFromFavorites']);
+    Route::post('add', [CartProductController::class, 'addToCart']);
 });
 
