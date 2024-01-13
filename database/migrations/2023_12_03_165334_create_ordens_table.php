@@ -9,10 +9,12 @@ return new class  extends Migration
     {
         Schema::create('orden', function (Blueprint $table) {
             $table->id('orden_id');
+            
             $table->foreignId('user_id')->constrained('users', 'id')->onDelete('CASCADE');
             $table->date('date')->nullable();
             $table->string('estado', 20);
-           
+            $table->integer("precioTotal");
+            $table->string("direccionEnvio");
         });
     }
 

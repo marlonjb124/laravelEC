@@ -9,10 +9,12 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements Authenticatable
+class User extends Model implements Authenticatable,CanResetPasswordContract
 {
-    use HasFactory, Notifiable, HasApiTokens, AuthenticatableTrait;
+    use HasFactory, Notifiable, HasApiTokens,  CanResetPassword,AuthenticatableTrait;
 
     protected $table = "users";
     protected $primaryKey = "id";
@@ -40,6 +42,14 @@ class User extends Model implements Authenticatable
     {
         return $this->hasMany(Cart::class, 'user_id', 'id');
     }
+    public function favoriteProducts()
+   {
+    return $this->belongsToMany(Product::class, 'favorite_products', 'user_id', 'product_id');
+   }
+   public function isAdmin()
+   {
+       return $this->rol === 'admin';
+   }
 }
 
 

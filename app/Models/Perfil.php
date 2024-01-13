@@ -9,11 +9,12 @@ class Perfil extends Model
 {
     use HasFactory;
 
-    protected $table = "perfil";
-    public $incrementing = false; // Establecer en false si no es una clave primaria autoincremental
+    protected $table = "perfiles";
+    public $incrementing = false; 
     protected $primaryKey = "user_id";
     public $timestamps = false;
 
+    protected $fillable = ["name","surname","address","phone","user_id","credit_card","profile_pic"];
     // Relación con User
     public function user()
     {

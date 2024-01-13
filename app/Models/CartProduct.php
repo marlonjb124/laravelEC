@@ -12,7 +12,9 @@ class CartProduct extends Model
     protected $table = "cart_product";
     protected $primaryKey = "id";
     public $timestamps = false;
-
+    protected $fillable = [
+        "cart_id","product_id","quantity"
+     ];
     // Relación con Cart
     public function cart()
     {
@@ -26,7 +28,7 @@ class CartProduct extends Model
     }
     public function getTotalAttribute()
     {
-        return $this->quantity * $this->product->price; // Asumiendo que hay un campo 'price' en tu modelo Product
+        return $this->quantity * $this->product->price; 
     }
     
 }

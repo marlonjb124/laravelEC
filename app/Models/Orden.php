@@ -12,7 +12,28 @@ class Orden extends Model
     protected $table = "orden";
     protected $primaryKey = "orden_id";
     public $timestamps = false;
-
+    protected $fillable = [
+       "user_id","date","estado","direccionEnvio","precioTotal"
+    ];
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    
+    //     static::creating(function ($orden) {
+    //         // Recalcula el precioTotal sumando los precios de los productos asociados
+    //         $precioTotal = 0;
+    //         echo($orden->ordenProducto->product->price);
+    //         foreach ($orden->ordenProducto as $ordenProducto) {
+    //             //El error esta aqui
+    //             echo($ordenProducto->product->price) ;
+    //             $precioTotal += $ordenProducto->product->price;
+    //         }
+            
+    //         $orden->precioTotal = $precioTotal;
+      
+    //     });
+    // }
+    
     // Relación con User
     public function user()
     {

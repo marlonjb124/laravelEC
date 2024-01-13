@@ -9,6 +9,7 @@ class PerfilController extends Controller
 {
     public function createProfile($user_id)
     {
+
         $newProfile = Perfil::create([
             'name' => null,
             'surname' => null,
@@ -46,5 +47,29 @@ class PerfilController extends Controller
         }
 
         return response()->json(['error' => 'User does not exist'], 404);
+        
     }
+    // public function updateProfile($user_id, Request $request)
+    // {
+    //     $profile = Perfil::where('user_id', $user_id)->first();
+
+    //     if ($profile) {
+    //         $profileData = $request->all();
+
+    //         $profile->name = $profileData->name;
+    //         $profile->surname = $profileData->surname;
+    //         $profile->adress = $profileData->name;
+    //         $profile->name = $profileData->name;
+    //         $profile->name = $profileData->name;
+    //         $profile->name = $profileData->name;
+
+
+    //         $profile->save();
+
+    //         return response()->json(['profile' => $profile]);
+    //     }
+
+    //     return response()->json(['error' => 'User does not exist'], 404);
+        
+    // }
 }

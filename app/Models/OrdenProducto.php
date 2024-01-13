@@ -12,7 +12,9 @@ class OrdenProducto extends Model
     protected $table = "orden_producto";
     protected $primaryKey = "id";
     public $timestamps = false;
-
+    protected $fillable = [
+        "orden_id","product_id"
+     ];
     // Relación con Orden
     public function orden()
     {
