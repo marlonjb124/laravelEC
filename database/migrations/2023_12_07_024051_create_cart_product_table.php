@@ -11,6 +11,7 @@ return new class extends Migration
     {
         Schema::create('cart_product', function (Blueprint $table) {
             $table->id();
+            $table->unique(['cart_id', 'product_id']);
             $table->foreignId('cart_id')->constrained('cart', 'cart_id')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products', 'product_id')->onDelete('cascade');
             $table->integer('quantity');

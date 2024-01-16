@@ -18,8 +18,9 @@ Route::prefix('Products')->group(function () {
     Route::get('Category/{category}', [ProductController::class, 'getProductByCategory']);
     Route::get('Name/{name}', [ProductController::class, 'getProductByName']);
     Route::get('{product_id}', [ProductController::class, 'getProductById']);
-    // Route::post('NewProduct', [ProductController::class, 'newProduct']);
+  
     Route::get('obtenerFavoritosUsuario/{userId}', [ProductController::class, 'obtenerFavoritosUsuario']);
+    
    
 });
 
@@ -106,7 +107,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('Add', [CartProductController::class, 'addToCart']);
     Route::delete('RemoveProduct/{productId}', [CartProductController::class, 'removeProductFromCart']);
     Route::delete('RemoveProductOrden/{orden_id}/{productId}', [OrdenProductoController::class, 'removeProductFromOrden']);
-    Route::put('editarProducto/{productId}', [ProductController::class, 'editarProducto']);
+
     Route::post('/cambiarContrasena', [PasswordController::class, 'cambiarContrasena']);
     Route::delete('DeleteUser', [UserController::class, 'deleteUser']);
     // Route::post('AddProduct', [OrdenProductoController::class, 'addProductToOrden']);
@@ -124,5 +125,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //     Route::post('NewProduct', [ProductController::class, 'newProduct']);
 // });
-    Route::post('/NewProduct', [ProductController::class, 'newProduct'])
-    ->middleware('auth:sanctum', 'rol');
+Route::middleware(['auth:sanctum', 'rol'])->group(function () {
+    Route::post('/NewProduct', [ProductController::class, 'newProduct']);
+    Route::post('editarProducto/{productId}', [ProductController::class, 'editarProducto']);
+    // Route::post('guardarimage', [ProductController::class, 'guardarimagen']);
+});

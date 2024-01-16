@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -81,9 +82,11 @@ class ProductController extends Controller
     {
     // $product = Product::findOrFail($productId);
     $user = $request->user();
+   
     $user->favoriteProducts()->syncWithoutDetaching([$request->product_id]);
 
     return response()->json(['message' => 'Product added to favorites']);
+   
     }
 
     public function removeFromFavorites(Request $request)
@@ -97,29 +100,42 @@ class ProductController extends Controller
 public function editarProducto(Request $request, $productId)
 {
     // Obtener el producto
+    Log::info('Solicitud recibida:', ['todo' => $request->all()]);
     $producto = Product::find($productId);
-
+    
     // Verificar si el producto existe
     if (!$producto) {
         return response()->json(['error' => 'Producto no encontrado'], 404);
     }
 
     // Validar los datos del formulario
-    $request->validate([
-        'name' => 'string|max:255',
-        'price' => 'numeric|min:0',
-        'description' => 'string|max:255',
-        'stock' => 'integer|min:0',
-        'category' => 'string|max:255',
-        'image' => 'string|max:255',
-        'descuento' => 'numeric|min:0|max:100',
-        'habilitado' => 'boolean',
-        'cantVentas' => 'integer|min:0',
-    ]);
+    // $request->validate([
+    //     'name' => 'string|max:255',
+    //     'price' => 'numeric|min:0',
+    //     'description' => 'string|max:255',
+    //     'stock' => 'integer|min:0',
+    //     'category' => 'string|max:255',
+    //     'image' => 'string|max:255',
+    //     'descuento' => 'numeric|min:0|max:100',
+    //     'habilitado' => 'boolean',
+    //     'cantVentas' => 'integer|min:0',
+    // ]);
+    if ($request->file("image")!= null) {
+        $image =$request->file("image");
+        // Llamar directamente a la función guardarNuevaImagen
+        $rutaNuevaImagen = $this->guardarimagen($image);
 
-    // Actualizar los atributos del producto con los datos del formulario
-    $producto->fill($request->all());
+        // Actualizar la ruta de la imagen en el modelo del producto
+        $producto->image = $rutaNuevaImagen;
+    }
+    if ($producto) {
+        $productData = $request->except("image");
 
+        foreach ($productData as $field => $value) {
+            $producto->$field = $value;
+        }
+    }
+    echo($producto);
     // Recalcular el actualPrice basado en el descuento y el precio
     // $producto->actualPrice = ($producto->descuento / 100) * $producto->price;
 
@@ -147,5 +163,31 @@ public function editarProducto(Request $request, $productId)
 
         return response()->json($favoritos, 200);
     }
-}
+    public function guardarimagen($image){
+        if ($image!= null) {
+            echo("4");
+            
+            // Obtener el archivo de la solicitud
+            $imagen = $image;
+    
+            // Definir la ubicación de destino
+            $ubicacion = 'D:\marlon\Informatica\web\laravel\PracticaEC\public\images';
+    
+            // Guardar la imagen en la ubicación especificada
+            $imagen->move($ubicacion, $imagen->getClientOriginalName());
+    
+            // Obtener la ruta completa de la imagen guardada
+            $rutaImagen = $ubicacion . '\\' . $imagen->getClientOriginalName();
+            return $rutaImagen;
+            echo("$rutaImagen");
+        }
+        else{ 
+            echo("cachibum en la image");
+        }
+    
+    }
 
+    // falta el emtodo de cambiar a deshabilitado elñ producto
+
+}
+    

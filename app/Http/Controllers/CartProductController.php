@@ -49,20 +49,28 @@ class CartProductController extends Controller
                 echo($cart);
             }
     
-            // Agrega el producto al carrito
-            $newProductToCart = CartProduct::create([
-                'cart_id' => $cart->cart_id,
-                'product_id' => $product_id,
-                'quantity' => $quantity,
-            ]);
-    
-            return response()->json($newProductToCart, 201);
-        } catch (\Exception $e) {
-            // Imprime el mensaje de error para depuración
-            // Log::error($e->getMessage()); // Descomentar para registrar el error en los logs
-            return response()->json(['error' => 'Internal Server Error'], 500);
+            // verifica
+            if (CartProduct::where('cart_id', $cart->cart_id)
+            ->where('product_id', $product_id)
+            ->first() !== null) {
+            // El producto ya existe, puedes manejar esto según tus necesidades
+            return response()->json(['error' => 'El producto ya está en el carrito'], 400);
         }
+
+        // Agrega el producto al carrito
+        $newProductToCart = CartProduct::create([
+            'cart_id' => $cart->cart_id,
+            'product_id' => $product_id,
+            'quantity' => $quantity,
+        ]);
+
+        return response()->json($newProductToCart, 201);
+    } catch (\Exception $e) {
+        // Imprime el mensaje de error para depuración
+       
+        return response()->json(['error' => 'Internal Server Error'], 500);
     }
+}
     public function removeAllProductsFromCart(Request $request)
 {
     try {

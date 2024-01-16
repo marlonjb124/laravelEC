@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\NewAccessToken;
+use App\Http\Controllers\PerfilController;
 
 class UserController extends Controller
 {
@@ -21,6 +22,10 @@ class UserController extends Controller
 
         // Crea un token de acceso para el nuevo usuario utilizando Sanctum
         $token = $newUser->createToken($tokenName);
+        $perfilController = new PerfilController();
+        $perfilController->createProfile($newUser->id);
+        
+        
 
         return response()->json(['user' => $newUser, 'access_token' => $token->plainTextToken]);
     }
