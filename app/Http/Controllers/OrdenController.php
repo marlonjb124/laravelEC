@@ -149,5 +149,13 @@ class OrdenController extends Controller
     
             return response()->json(['message' => 'Orden cancelada exitosamente'], 200);
         }
+        public function getOrders()
+        {
+            $orden = Orden::all();
+            // $perfils = Perfil::all();
+            // "perfiles"=> $perfils
+    
+            return response()->json(['Orden' => $orden,]);
+        }
     
 }
