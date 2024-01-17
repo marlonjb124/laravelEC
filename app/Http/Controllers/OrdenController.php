@@ -2,10 +2,14 @@
 
 // OrdenController.php
 namespace App\Http\Controllers;
+
+use App\Models\Cart;
+use App\Models\CartProduct;
 use Illuminate\Http\Request;
 use App\Models\Orden;
 use App\Models\OrdenProducto;
 use App\Models\Product;
+use Illuminate\Support\Facades\App;
 
 class OrdenController extends Controller
 {
@@ -31,12 +35,16 @@ class OrdenController extends Controller
             "direccionEnvio"=> $ordenData['direccionEnvio'],
             'precioTotal' => $precioTotal,
         ]);
-
+        // App::call('App\Http\Controllers\CartProductController@removeAllProductsFromCart');
+        $cart = Cart::where('user_id', $ordenData["user_id"])->first();      
+        CartProduct::where('cart_id', $cart->cart_id)->delete();
         foreach ($productsIds as $productId) {
             OrdenProducto::create([
                 'orden_id' => $newOrden['orden_id'],
                 'product_id' => $productId,
             ]);
+
+        
         }
         
         return response()->json($newOrden, 201);

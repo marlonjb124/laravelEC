@@ -128,5 +128,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::middleware(['auth:sanctum', 'rol'])->group(function () {
     Route::post('/NewProduct', [ProductController::class, 'newProduct']);
     Route::post('editarProducto/{productId}', [ProductController::class, 'editarProducto']);
+    Route::put('/toggleHabilitar/{productId}', [ProductController::class, 'toggleHabilitar']);
     // Route::post('guardarimage', [ProductController::class, 'guardarimagen']);
 });

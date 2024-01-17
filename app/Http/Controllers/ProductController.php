@@ -64,20 +64,46 @@ class ProductController extends Controller
 
         return response()->json($product);
     }
-
     public function newProduct(Request $request)
     {
-        $productData = $request->all();
-
-        $newProduct = Product::create($productData);
-
-        // Transformar $newProduct según necesites
-
-        $newProduct->save();
-
-        return response()->json($newProduct); 
+        // Validar los datos del formulario
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'description' => 'string|max:255',
+            'stock' => 'required|integer|min:0',
+            'category' => 'string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Ajusta las reglas según tus necesidades
+            'descuento' => 'numeric|min:0|max:100',
+            'habilitado' => 'boolean',
+            'cantVentas' => 'integer|min:0',
+        ]);
+    
+        // Obtener la imagen de la solicitud
+        $imagen = $request->file('image');
+    
+        // Llamar al método para manejar la nueva imagen
+        $rutaNuevaImagen = $this->guardarImagen($imagen);
+    
+        // Crear un nuevo producto con los datos del formulario y la URL de la imagen
+        $producto = new Product([
+            'name' => $request->input('name'),
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+            'stock' => $request->input('stock'),
+            'category' => $request->input('category'),
+            'image' => $rutaNuevaImagen,
+            'descuento' => $request->input('descuento'),
+            'habilitado' => $request->input('habilitado', false),
+            'cantVentas' => $request->input('cantVentas', 0),
+        ]);
+    
+        // Guardar el nuevo producto en la base de datos
+        $producto->save();
+    
+        // Respuesta con el nuevo producto creado
+        return response()->json(['mensaje' => 'Producto creado correctamente', 'producto' => $producto]);
     }
-
     public function addToFavorites(Request $request)
     {
     // $product = Product::findOrFail($productId);
@@ -165,7 +191,7 @@ public function editarProducto(Request $request, $productId)
     }
     public function guardarimagen($image){
         if ($image!= null) {
-            echo("4");
+            
             
             // Obtener el archivo de la solicitud
             $imagen = $image;
@@ -179,7 +205,7 @@ public function editarProducto(Request $request, $productId)
             // Obtener la ruta completa de la imagen guardada
             $rutaImagen = $ubicacion . '\\' . $imagen->getClientOriginalName();
             return $rutaImagen;
-            echo("$rutaImagen");
+            
         }
         else{ 
             echo("cachibum en la image");
@@ -187,7 +213,27 @@ public function editarProducto(Request $request, $productId)
     
     }
 
-    // falta el emtodo de cambiar a deshabilitado elñ producto
+
+public function toggleHabilitar(Request $request, $productId)
+{
+    // Obtener el producto
+    $producto = Product::findOrFail($productId);
+
+    // Verificar si el producto existe
+    if (!$producto) {
+        return response()->json(['error' => 'Producto no encontrado'], 404);
+    }
+
+    // Cambiar el estado de habilitación/deshabilitación
+    $producto->habilitado = !$producto->habilitado;
+
+    // Guardar los cambios en el producto
+    $producto->save();
+
+    // Respuesta con el nuevo estado del producto
+    return response()->json(['mensaje' => 'Estado cambiado correctamente', 'habilitado' => $producto->habilitado]);
+}
+
 
 }
     

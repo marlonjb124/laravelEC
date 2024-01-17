@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\NewAccessToken;
 use App\Http\Controllers\PerfilController;
+use App\Models\Perfil;
 
 class UserController extends Controller
 {
@@ -59,8 +60,10 @@ class UserController extends Controller
     public function getUsers()
     {
         $users = User::all();
+        // $perfils = Perfil::all();
+        // "perfiles"=> $perfils
 
-        return response()->json(['users' => $users]);
+        return response()->json(['users' => $users,]);
     }
 
     public function getUserByEmail($email)
