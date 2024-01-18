@@ -2,17 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Product;
 
 class ProductsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Product::factory()->count(25)->create();
+        // Crear 2 productos de cualquier categoría
+        Product::factory()->count(2)->create();
+
+        // Crear 3 productos de la categoría Manualidades
+        Product::factory()->count(3)->create([
+            'category' => 'Manualidades'
+        ]);
+
+        // Crear 6 productos de la categoría Materiales de Construcción
+        Product::factory()->count(6)->create([
+            'category' => 'Materiales de Construccion'
+        ]);
     }
 }
+
